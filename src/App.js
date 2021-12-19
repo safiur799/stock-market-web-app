@@ -1,9 +1,10 @@
-import "./App.css";
+import Stock from "./Components/Stock";
 
 function App() {
   return (
     <div className="App">
-      <h1>stock market app</h1>
+      <h1 style={{ textAlign: "center" }}>stock market app</h1>
+      <Stock />
     </div>
   );
 }
