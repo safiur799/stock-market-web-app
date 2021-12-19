@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import "./Stock.css";
 
 function Stock() {
   const [stockData, setStockData] = useState([]);
@@ -17,6 +18,9 @@ function Stock() {
     const allData = await axios.get("http://localhost:8000/stocks");
     console.log(allData.data);
     setStockData(allData.data);
+  };
+  const addToWatchList = async (el) => {
+    await axios.post("http://localhost:8000/watch", el);
   };
   return (
     <Container>
@@ -39,7 +43,7 @@ function Stock() {
             })
             .map((element, ind) => (
               //  {setCheckColor((element[1] - element[2]) / element[2])}
-              <Wrap key={element[0]}>
+              <Wrap key={element[0]} className="main_div">
                 <Left>
                   <span
                     style={{
@@ -84,7 +88,10 @@ function Stock() {
                     <span style={{ color: "black", marginLeft: "5px" }}>
                       {((element[1] - element[2]) / element[2]).toFixed(4)}%
                     </span>
-                    <AddButton></AddButton>
+                    <AddButton
+                      className="add_button"
+                      onClick={() => addToWatchList(element)}
+                    ></AddButton>
                   </ArrowElement>
                 </Right>
               </Wrap>
@@ -120,6 +127,9 @@ const Wrap = styled.div`
   justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid #d3d3d3;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const Left = styled.div`
   display: flex;
@@ -149,9 +159,10 @@ const ArrowElement = styled.div`
 `;
 const AddButton = styled(AddOutlinedIcon)`
   color: black;
-  display: hidden;
   visibility: hidden;
-  :hover {
-    visibility: visible;
+  background-color: blue;
+  color: white;
+  &:hover {
+    cursor: pointer;
   }
 `;
