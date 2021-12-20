@@ -67,7 +67,7 @@ function Stock() {
                       }`,
                     }}
                   >
-                    {element.stockName}
+                    {element.stockName.split("::")}
                   </span>
                   <span style={{ color: "black", fontSize: "13px" }}>NSE</span>
                 </Left>
@@ -141,7 +141,12 @@ const Container = styled.div`
   margin-top: 40px;
 `;
 const Section = styled.div``;
-const Input = styled.input``;
+const Input = styled.input`
+  padding: 7px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+`;
 const DisplayContent = styled.div`
   // background-color: black;
   color: white;
