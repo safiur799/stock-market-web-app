@@ -18,18 +18,22 @@ function Stock() {
   }, []);
 
   const fetData = async () => {
-    const allData = await axios.get("http://localhost:8000/stocks");
+    const allData = await axios.get(
+      "https://trinkerr-stock.herokuapp.com/stocks"
+    );
     console.log(allData.data);
     setStockData(allData.data);
   };
   const fetDataWatch = async () => {
-    const allData = await axios.get("http://localhost:8000/watch");
+    const allData = await axios.get(
+      "https://trinkerr-stock.herokuapp.com/watch"
+    );
     console.log(allData.data);
     setWatchData(allData.data);
   };
   const addToWatchList = async (element) => {
     console.log(element);
-    await axios.post("http://localhost:8000/watch", element);
+    await axios.post("https://trinkerr-stock.herokuapp.com/watch", element);
   };
   return (
     <Container>
