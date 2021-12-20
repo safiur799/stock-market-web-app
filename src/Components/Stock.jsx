@@ -67,7 +67,7 @@ function Stock() {
                       }`,
                     }}
                   >
-                    {element.stockName.split("::")}
+                    {element.stockName}
                   </span>
                   <span style={{ color: "black", fontSize: "13px" }}>NSE</span>
                 </Left>
@@ -83,7 +83,7 @@ function Stock() {
                       }`,
                     }}
                   >
-                    {element[1]}
+                    {element.currentPrice}
                   </span>
                   <ArrowElement>
                     <Arrow
@@ -105,7 +105,11 @@ function Stock() {
                       }}
                     ></Arrow>
                     <span style={{ color: "black", marginLeft: "5px" }}>
-                      {((element[1] - element[2]) / element[2]).toFixed(4)}%
+                      {(
+                        (element.currentPrice - element.previous) /
+                        element.previous
+                      ).toFixed(4)}
+                      %
                     </span>
                     {/* <AddButton
                       className="add_button"
