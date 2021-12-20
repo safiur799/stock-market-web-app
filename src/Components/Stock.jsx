@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import "./Stock.css";
+import ButtonComponent from "./ButtonComponent";
 
 function Stock() {
   const [stockData, setStockData] = useState([]);
   const [inputText, setInputText] = useState("");
   const [checkColor, setCheckColor] = useState(0);
   const [splitText, setSplitText] = useState([]);
+  const [watchData, setWatchData] = useState([]);
   useEffect(() => {
     fetData();
+    fetDataWatch();
   }, []);
 
   const fetData = async () => {
@@ -19,8 +22,14 @@ function Stock() {
     console.log(allData.data);
     setStockData(allData.data);
   };
-  const addToWatchList = async (el) => {
-    await axios.post("http://localhost:8000/watch", el);
+  const fetDataWatch = async () => {
+    const allData = await axios.get("http://localhost:8000/watch");
+    console.log(allData.data);
+    setWatchData(allData.data);
+  };
+  const addToWatchList = async (element) => {
+    console.log(element);
+    await axios.post("http://localhost:8000/watch", element);
   };
   return (
     <Container>
@@ -36,25 +45,29 @@ function Stock() {
               if (inputText === "") {
                 return el;
               } else if (
-                el[0].toLowerCase().includes(inputText.toLocaleLowerCase())
+                el.stockName
+                  .toLowerCase()
+                  .includes(inputText.toLocaleLowerCase())
               ) {
                 return el;
               }
             })
             .map((element, ind) => (
               //  {setCheckColor((element[1] - element[2]) / element[2])}
-              <Wrap key={element[0]} className="main_div">
+              <Wrap key={element.stockName} className="main_div">
                 <Left>
                   <span
                     style={{
                       color: `${
-                        (element[1] - element[2]) / element[2] > 0
+                        (element.currentPrice - element.previous) /
+                          element.previous >
+                        0
                           ? "green"
                           : "red"
                       }`,
                     }}
                   >
-                    {element[0].split("::")}
+                    {element.stockName.split("::")}
                   </span>
                   <span style={{ color: "black", fontSize: "13px" }}>NSE</span>
                 </Left>
@@ -62,7 +75,9 @@ function Stock() {
                   <span
                     style={{
                       color: `${
-                        (element[1] - element[2]) / element[2] >= 0
+                        (element.currentPrice - element.previous) /
+                          element.previous >=
+                        0
                           ? "green"
                           : "red"
                       }`,
@@ -74,12 +89,16 @@ function Stock() {
                     <Arrow
                       style={{
                         borderTop: `${
-                          (element[1] - element[2]) / element[2] >= 0
+                          (element.currentPrice - element.previous) /
+                            element.previous >=
+                          0
                             ? "5px solid transparent"
                             : "7px solid red"
                         }`,
                         borderBottom: `${
-                          (element[1] - element[2]) / element[2] >= 0
+                          (element.currentPrice - element.previous) /
+                            element.previous >=
+                          0
                             ? "7px solid green"
                             : "5px solid transparent"
                         }`,
@@ -88,10 +107,16 @@ function Stock() {
                     <span style={{ color: "black", marginLeft: "5px" }}>
                       {((element[1] - element[2]) / element[2]).toFixed(4)}%
                     </span>
-                    <AddButton
+                    {/* <AddButton
                       className="add_button"
                       onClick={() => addToWatchList(element)}
-                    ></AddButton>
+                    >
+                    </AddButton> */}
+                    <ButtonComponent
+                      el={element}
+                      watchData={watchData}
+                      addToWatchList={addToWatchList}
+                    />
                   </ArrowElement>
                 </Right>
               </Wrap>
